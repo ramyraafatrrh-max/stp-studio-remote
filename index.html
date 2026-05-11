@@ -2,82 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>STP Studio Console</title>
+    <title>STP ANALYTICAL STUDIO</title>
     <style>
-        :root {
-            --stp-green: #12AD2B; --stp-yellow: #FFCE00; --stp-red: #D21034; --stp-black: #000000;
-        }
-        body { background: var(--stp-black); margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; }
+        :root { --stp-green: #12AD2B; --stp-yellow: #FFCE00; --stp-red: #D21034; }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: 'Arial', sans-serif; background: black; }
         
-        #remote-container {
-            background: var(--stp-green); padding: 10px; width: 580px;
-            border: 2px solid white; display: flex; flex-direction: column; gap: 5px;
+        /* The Remote Bar at the top */
+        #remote-bar {
+            height: 80px;
+            background: var(--stp-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 4px solid var(--stp-red);
+            z-index: 100;
+            position: relative;
         }
-        .button-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        
+
         .btn {
-            background: var(--stp-yellow); color: black; border: 2px solid black;
-            padding: 12px; text-align: center; font-weight: bold; border-radius: 4px;
-            cursor: pointer; text-transform: uppercase; font-size: 0.8rem;
+            background: var(--stp-yellow);
+            color: black;
+            border: 2px solid black;
+            padding: 10px 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
         }
+
         .btn:hover { background: white; }
-        
-        .launch-btn {
-            background: var(--stp-red); color: white; padding: 15px 30px;
-            border: none; border-radius: 30px; font-weight: bold; cursor: pointer;
+
+        /* The Canva Presentation Window */
+        #canva-frame {
+            width: 100%;
+            height: calc(100vh - 80px);
+            border: none;
         }
     </style>
 </head>
 <body>
 
-    <button class="launch-btn" id="pipButton">📺 START STUDIO REMOTE</button>
-
-    <div id="remote-container">
-        <div style="background:var(--stp-red); color:white; font-size:10px; padding:3px; text-align:center; font-weight:bold;">
-            SÃO TOMÉ ANALYTICAL STUDIO - LIVE CONSOLE
-        </div>
-        <div class="button-row">
-            <div class="btn" onclick="navigate('https://canva.link/5biowk6ov7jhqc6')">Scouting</div>
-            <div class="btn" onclick="navigate('https://canva.link/hepw0ymjujivjyl')">Tactics</div>
-            <div class="btn" onclick="navigate('https://canva.link/2rl7kvkh5i203k2')">Plan</div>
-            <div class="btn" onclick="navigate('https://canva.link/gsa2fkby7usl8ol')">Invite</div>
-        </div>
+    <div id="remote-bar">
+        <div style="color:white; font-weight:bold; margin-right: 20px;">STP MISSION CONTROL:</div>
+        <a href="https://canva.link/5biowk6ov7jhqc6'" target="presentation" class="btn">Scouting</a>
+        <a href="https://canva.link/hepw0ymjujivjyl'" target="presentation" class="btn">Tactics</a>
+        <a href="https://canva.link/2rl7kvkh5i203k2'" target="presentation" class="btn">Game Plan</a>
+        <a href="https://canva.link/gsa2fkby7usl8ol'" target="presentation" class="btn">Invitation</a>
     </div>
 
-    <script>
-        // This function forces the MAIN window to change slides
-        function navigate(url) {
-            if (window.opener) {
-                window.opener.location.href = url;
-            } else {
-                // Fallback if the connection is lost
-                window.open(url, 'canva_window');
-            }
-        }
+    <iframe name="presentation" id="canva-frame" src="YOUR_BASE_CANVA_URL"></iframe>
 
-        const pipButton = document.getElementById('pipButton');
-        const remote = document.getElementById('remote-container');
-
-        pipButton.addEventListener('click', async () => {
-            if ('documentPictureInPicture' in window) {
-                const pipWindow = await window.documentPictureInPicture.requestWindow({
-                    width: 600, height: 110,
-                });
-                
-                // Essential: Tell the new window who its "opener" is so navigation works
-                pipWindow.opener = window;
-                pipWindow.document.body.append(remote);
-
-                // Copy styles
-                [...document.styleSheets].forEach((styleSheet) => {
-                    try {
-                        const style = document.createElement('style');
-                        style.textContent = [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
-                        pipWindow.document.head.appendChild(style);
-                    } catch (e) {}
-                });
-            }
-        });
-    </script>
 </body>
 </html>
