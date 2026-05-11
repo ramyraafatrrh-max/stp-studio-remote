@@ -2,58 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>STP ANALYTICAL STUDIO</title>
+    <title>STP Mission Control</title>
     <style>
         :root { --stp-green: #12AD2B; --stp-yellow: #FFCE00; --stp-red: #D21034; }
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: 'Arial', sans-serif; background: black; }
-        
-        /* The Remote Bar at the top */
-        #remote-bar {
-            height: 80px;
-            background: var(--stp-green);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            border-bottom: 4px solid var(--stp-red);
-            z-index: 100;
-            position: relative;
-        }
-
+        body { background: var(--stp-green); margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; }
+        #header { background: var(--stp-red); color: white; text-align: center; padding: 5px; font-size: 12px; }
+        .button-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 15px; }
         .btn {
-            background: var(--stp-yellow);
-            color: black;
-            border: 2px solid black;
-            padding: 10px 25px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
+            background: var(--stp-yellow); color: black; border: 3px solid black;
+            padding: 15px 5px; text-align: center; font-weight: bold; border-radius: 8px;
+            cursor: pointer; text-transform: uppercase; font-size: 0.9rem; transition: 0.2s;
         }
-
-        .btn:hover { background: white; }
-
-        /* The Canva Presentation Window */
-        #canva-frame {
-            width: 100%;
-            height: calc(100vh - 80px);
-            border: none;
-        }
+        .btn:active { background: white; transform: translateY(3px); }
     </style>
 </head>
 <body>
-
-    <div id="remote-bar">
-        <div style="color:white; font-weight:bold; margin-right: 20px;">STP MISSION CONTROL:</div>
-        <a href="https://canva.link/5biowk6ov7jhqc6'" target="presentation" class="btn">Scouting</a>
-        <a href="https://canva.link/hepw0ymjujivjyl'" target="presentation" class="btn">Tactics</a>
-        <a href="https://canva.link/2rl7kvkh5i203k2'" target="presentation" class="btn">Game Plan</a>
-        <a href="https://canva.link/gsa2fkby7usl8ol'" target="presentation" class="btn">Invitation</a>
+    <div id="header">STP ANALYTICAL STUDIO - LIVE REMOTE</div>
+    <div class="button-row">
+        <div class="btn" onclick="nav('https://canva.link/5biowk6ov7jhqc6'')">Scouting</div>
+        <div class="btn" onclick="nav('https://canva.link/hepw0ymjujivjyl'')">Tactics</div>
+        <div class="btn" onclick="nav('https://canva.link/2rl7kvkh5i203k2'')">Game Plan</div>
+        <div class="btn" onclick="nav('https://canva.link/gsa2fkby7usl8ol'')">Invite</div>
     </div>
 
-    <iframe name="presentation" id="canva-frame" src="https://canva.link/648ulqs44rjbpun"></iframe>
-
+    <script>
+        function nav(url) {
+            // This attempts to update the window that opened this one
+            if (window.opener && !window.opener.closed) {
+                window.opener.location.href = url;
+            } else {
+                // If the connection is lost, it opens in a new tab as a backup
+                window.open(url, 'presentation');
+            }
+        }
+    </script>
 </body>
 </html>
