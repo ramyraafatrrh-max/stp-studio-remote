@@ -2,39 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>STP Mission Control</title>
+    <title>STP MISSION CONTROL</title>
     <style>
-        :root { --stp-green: #12AD2B; --stp-yellow: #FFCE00; --stp-red: #D21034; }
-        body { background: var(--stp-green); margin: 0; font-family: 'Arial Black', sans-serif; overflow: hidden; }
-        #header { background: var(--stp-red); color: white; text-align: center; padding: 5px; font-size: 12px; }
-        .button-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 15px; }
-        .btn {
-            background: var(--stp-yellow); color: black; border: 3px solid black;
-            padding: 15px 5px; text-align: center; font-weight: bold; border-radius: 8px;
-            cursor: pointer; text-transform: uppercase; font-size: 0.9rem; transition: 0.2s;
+        :root { --stp-green: #12AD2B; --stp-yellow: #FFCE00; --stp-red: #D21034; --stp-black: #000000; }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: 'Arial', sans-serif; display: flex; background: black; }
+        
+        /* The Vertical Remote on the left */
+        #remote-sidebar {
+            width: 200px;
+            background: var(--stp-green);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            border-right: 5px solid var(--stp-red);
+            z-index: 100;
         }
-        .btn:active { background: white; transform: translateY(3px); }
+
+        .btn {
+            background: var(--stp-yellow);
+            color: black;
+            border: 3px solid black;
+            padding: 20px 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 13px;
+            box-shadow: 0 4px 0 var(--stp-black);
+        }
+
+        .btn:active { transform: translateY(3px); box-shadow: none; }
+
+        .label { color: white; font-size: 10px; text-align: center; margin-top: auto; font-weight: bold; }
+
+        /* The Presentation Area */
+        #content-frame { flex-grow: 1; border: none; background: white; }
     </style>
 </head>
 <body>
-    <div id="header">STP ANALYTICAL STUDIO - LIVE REMOTE</div>
-    <div class="button-row">
-        <div class="btn" onclick="nav('https://canva.link/5biowk6ov7jhqc6'')">Scouting</div>
-        <div class="btn" onclick="nav('https://canva.link/hepw0ymjujivjyl'')">Tactics</div>
-        <div class="btn" onclick="nav('https://canva.link/2rl7kvkh5i203k2'')">Game Plan</div>
-        <div class="btn" onclick="nav('https://canva.link/gsa2fkby7usl8ol'')">Invite</div>
+
+    <div id="remote-sidebar">
+        <div style="color:white; font-weight:bold; text-align:center; margin-bottom: 20px; border-bottom: 2px solid var(--stp-red); padding-bottom: 10px;">
+            STUDIO REMOTE
+        </div>
+        
+        <a href="https://canva.link/5biowk6ov7jhqc6''" target="stage" class="btn">Scouting</a>
+        <a href="https://canva.link/hepw0ymjujivjyl''" target="stage" class="btn">Tactics</a>
+        <a href="https://canva.link/2rl7kvkh5i203k2''" target="stage" class="btn">Game Plan</a>
+        <a href="https://canva.link/gsa2fkby7usl8ol''" target="stage" class="btn">Invitation</a>
+
+        <div class="label">SÃO TOMÉ 2026</div>
     </div>
 
-    <script>
-        function nav(url) {
-            // This attempts to update the window that opened this one
-            if (window.opener && !window.opener.closed) {
-                window.opener.location.href = url;
-            } else {
-                // If the connection is lost, it opens in a new tab as a backup
-                window.open(url, 'presentation');
-            }
-        }
-    </script>
+    <iframe name="stage" id="content-frame" src="YOUR_BASE_PRESENTATION_URL"></iframe>
+
 </body>
 </html>
