@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>STP Mission Control</title>
+    <style>
+        :root {
+            --stp-green: #12AD2B;
+            --stp-yellow: #FFCE00;
+            --stp-red: #D21034;
+            --stp-black: #000000;
+        }
+        body {
+            background-color: var(--stp-black);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        /* The container for the floating window */
+        #remote-container {
+            background: var(--stp-green);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 550px; /* Widened to fit the row */
+            border: 3px solid var(--stp-black);
+        }
+        /* The horizontal grid */
+        .button-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 equal columns in one line */
+            gap: 8px;
+        }
+        .btn {
+            background: var(--stp-yellow);
+            color: black;
+            border: 2px solid black;
+            padding: 12px 5px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .btn:hover {
+            background: white;
+        }
+        .launch-btn {
+            background: var(--stp-red);
+            color: white;
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(210, 16, 52, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <button class="launch-btn" id="pipButton">🚀 LAUNCH HORIZONTAL REMOTE</button>
+
+    <div id="remote-container">
+        <div style="text-align:center; font-weight:bold; color:white; background:var(--stp-red); margin-bottom:5px; padding:2px; font-size: 0.7rem; letter-spacing: 1px;">
+            STP ANALYTICAL STUDIO - MISSION CONTROL
+        </div>
+        <div class="button-row">
+        <a href="https://canva.link/5biowk6ov7jhqc6" target="_blank" class="btn">SCOUTING</a>
+        <a href="https://canva.link/hepw0ymjujivjyl" target="_blank" class="btn">TACTICS</a>
+        <a href="https://canva.link/2rl7kvkh5i203k2" target="_blank" class="btn">PLAN</a>
+        <a href="https://canva.link/gsa2fkby7usl8ol" target="_blank" class="btn">INVITE</a>
+        </div>
+    </div>
+
+    <script>
+        const pipButton = document.getElementById('pipButton');
+        const remote = document.getElementById('remote-container');
+
+        pipButton.addEventListener('click', async () => {
+            if ('documentPictureInPicture' in window) {
+                const pipWindow = await window.documentPictureInPicture.requestWindow({
+                    width: 600,  /* Adjusted width for horizontal layout */
+                    height: 120, /* Slimmer height for the row */
+                });
+
+                // Move remote to floating window
+                pipWindow.document.body.append(remote);
+                
+                // Style injection
+                [...document.styleSheets].forEach((styleSheet) => {
+                    try {
+                        const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
+                        const style = document.createElement('style');
+                        style.textContent = cssRules;
+                        pipWindow.document.head.appendChild(style);
+                    } catch (e) {
+                        const link = document.createElement('link');
+                        link.rel = 'stylesheet';
+                        link.href = styleSheet.href;
+                        pipWindow.document.head.appendChild(link);
+                    }
+                });
+            } else {
+                alert("Please use the latest version of Google Chrome for this feature.");
+            }
+        });
+    </script>
+</body>
+</html>
