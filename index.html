@@ -2,80 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>STP Studio Console</title>
+    <title>STP Mission Control</title>
     <style>
         :root {
-            --stp-green: #12AD2B; --stp-yellow: #FFCE00; --stp-red: #D21034; --stp-black: #000000;
+            --stp-green: #12AD2B;
+            --stp-yellow: #FFCE00;
+            --stp-red: #D21034;
+            --stp-black: #000000;
         }
-        body { background: var(--stp-black); margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; }
-        
+        body {
+            background-color: var(--stp-black);
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
         #remote-container {
-            background: var(--stp-green); padding: 10px; width: 580px;
-            border: 2px solid white; display: flex; flex-direction: column; gap: 5px;
+            background: var(--stp-green);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 300px;
         }
-        .button-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        
         .btn {
-            background: var(--stp-yellow); color: black; border: 2px solid black;
-            padding: 12px; text-align: center; font-weight: bold; border-radius: 4px;
-            cursor: pointer; text-transform: uppercase; font-size: 0.8rem;
+            background: var(--stp-yellow);
+            color: black;
+            border: 2px solid black;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
         }
-        .btn:hover { background: white; }
-        
         .launch-btn {
-            background: var(--stp-red); color: white; padding: 15px 30px;
-            border: none; border-radius: 30px; font-weight: bold; cursor: pointer;
+            background: var(--stp-red);
+            color: white;
+            padding: 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 
-    <button class="launch-btn" id="pipButton">📺 START STUDIO REMOTE</button>
+    <button class="launch-btn" id="pipButton">🚀 LAUNCH FLOATING REMOTE</button>
 
     <div id="remote-container">
-        <div style="background:var(--stp-red); color:white; font-size:10px; padding:3px; text-align:center; font-weight:bold;">
-            SÃO TOMÉ ANALYTICAL STUDIO - LIVE CONSOLE
-        </div>
-        <div class="button-row">
-            <div class="btn" onclick="navigate('https://canva.link/5biowk6ov7jhqc6')">Scouting</div>
-            <div class="btn" onclick="navigate('https://canva.link/hepw0ymjujivjyl')">Tactics</div>
-            <div class="btn" onclick="navigate('https://canva.link/2rl7kvkh5i203k2')">Plan</div>
-            <div class="btn" onclick="navigate('https://canva.link/gsa2fkby7usl8ol')">Invite</div>
-        </div>
+        <h2 style="color:var(--stp-red); margin:0; text-align:center;">STP STUDIO</h2>
+        <a href="https://canva.link/5biowk6ov7jhqc6" target="_blank" class="btn">SCOUTING</a>
+        <a href="https://canva.link/hepw0ymjujivjyl" target="_blank" class="btn">TACTICS</a>
+        <a href="https://canva.link/2rl7kvkh5i203k2" target="_blank" class="btn">PLAN</a>
+        <a href="https://canva.link/gsa2fkby7usl8ol" target="_blank" class="btn">INVITE</a>
     </div>
 
     <script>
-        // This function forces the MAIN window to change slides
-        function navigate(url) {
-            if (window.opener) {
-                window.opener.location.href = url;
-            } else {
-                // Fallback if the connection is lost
-                window.open(url, 'canva_window');
-            }
-        }
-
         const pipButton = document.getElementById('pipButton');
         const remote = document.getElementById('remote-container');
 
         pipButton.addEventListener('click', async () => {
             if ('documentPictureInPicture' in window) {
+                // Open a Document PiP window
                 const pipWindow = await window.documentPictureInPicture.requestWindow({
-                    width: 600, height: 110,
+                    width: 300,
+                    height: 400,
                 });
-                
-                // Essential: Tell the new window who its "opener" is so navigation works
-                pipWindow.opener = window;
-                pipWindow.document.body.append(remote);
 
-                // Copy styles
+                // Move the buttons into the floating window
+                pipWindow.document.body.append(remote);
+                
+                // Copy styles to the new window
                 [...document.styleSheets].forEach((styleSheet) => {
                     try {
+                        const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
                         const style = document.createElement('style');
-                        style.textContent = [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
+                        style.textContent = cssRules;
                         pipWindow.document.head.appendChild(style);
-                    } catch (e) {}
+                    } catch (e) {
+                        const link = document.createElement('link');
+                        link.rel = 'stylesheet';
+                        link.href = styleSheet.href;
+                        pipWindow.document.head.appendChild(link);
+                    }
                 });
+            } else {
+                alert("Your browser doesn't support floating windows. Try the latest version of Chrome.");
             }
         });
     </script>
